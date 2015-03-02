@@ -59,6 +59,34 @@ Adafruit_NeoPixel::Adafruit_NeoPixel(uint16_t n, uint8_t p, uint8_t t) : numLEDs
   
 }
 
+Adafruit_NeoPixel::Adafruit_NeoPixel(uint8_t p, uint8_t t) : pin(p), pixels(NULL) ,type(t), brightness(0), endTime(0)
+#ifdef __AVR__
+  ,port(portOutputRegister(digitalPinToPort(p))),
+   pinMask(digitalPinToBitMask(p))
+#endif
+{
+  if(t & NEO_GRB) { // GRB vs RGB; might add others if needed
+    rOffset = 1;
+    gOffset = 0;
+    bOffset = 2;
+  } else if (t & NEO_BRG) {
+    rOffset = 1;
+    gOffset = 2;
+    bOffset = 0;
+  } else {
+    rOffset = 0;
+    gOffset = 1;
+    bOffset = 2;
+  }
+}
+
+void Adafruit_NeoPixel::setnumLEDs(uint16_t n) : numLEDs(n), numBytes(n * 3){
+	if((pixels = (uint8_t *)malloc(numBytes))) {
+		memset(pixels, 0, numBytes);
+	}
+}
+
+
 Adafruit_NeoPixel::~Adafruit_NeoPixel() {
   if(pixels) free(pixels);
   pinMode(pin, INPUT);
