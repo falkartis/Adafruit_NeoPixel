@@ -33,6 +33,7 @@
 
 #include "Adafruit_NeoPixel.h"
 
+/*
 Adafruit_NeoPixel::Adafruit_NeoPixel(uint16_t n, uint8_t p, uint8_t t) : numLEDs(n), numBytes(n * 3), pin(p), pixels(NULL)
   ,type(t), brightness(0), endTime(0)
 #ifdef __AVR__
@@ -58,8 +59,9 @@ Adafruit_NeoPixel::Adafruit_NeoPixel(uint16_t n, uint8_t p, uint8_t t) : numLEDs
   }
   
 }
+*/
 
-Adafruit_NeoPixel::Adafruit_NeoPixel(uint8_t p, uint8_t t) : pin(p), pixels(NULL) ,type(t), brightness(0), endTime(0)
+Adafruit_NeoPixel::Adafruit_NeoPixel(uint8_t p, uint8_t t) :  numLEDs(NULL), numBytes(NULL), pin(p), pixels(NULL) ,type(t), brightness(0), endTime(0)
 #ifdef __AVR__
   ,port(portOutputRegister(digitalPinToPort(p))),
    pinMask(digitalPinToBitMask(p))
@@ -80,7 +82,9 @@ Adafruit_NeoPixel::Adafruit_NeoPixel(uint8_t p, uint8_t t) : pin(p), pixels(NULL
   }
 }
 
-void Adafruit_NeoPixel::setnumLEDs(uint16_t n) : numLEDs(n), numBytes(n * 3){
+void Adafruit_NeoPixel::setnumLEDs(uint16_t n) {
+	numLEDs=n;
+	numBytes=n*3;
 	if((pixels = (uint8_t *)malloc(numBytes))) {
 		memset(pixels, 0, numBytes);
 	}
